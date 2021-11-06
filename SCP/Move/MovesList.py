@@ -8,7 +8,7 @@ def MoveList():
     ret["homework finnesse"] = Move(.75, 25)
     ret["knowledge cram"] = Move(.65, 35)
     #trumpcard
-    ret["bitch slap"] = Move(.45, 100)
+    ret["bitch slap"] = Move(1, 100)
 
     #teacher moves
     ret["ramble and shamble"] = Move(.95, 12)

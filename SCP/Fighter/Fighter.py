@@ -1,3 +1,4 @@
+from Move.MovesList import MoveList
 class Fighter:
     
     def __init__(self, name, level, attack, defense, health, moves, experience, maxhealth):
@@ -30,6 +31,14 @@ class Fighter:
 
     def levelUp(self):
         self.level += 1
+        if self.level == 5:
+            self.newMove(MoveList()["eyeroll"])
+        if self.level == 10:
+            self.newMove(MoveList()["homework finesse"])
+        if self.level == 15:
+            self.newMove(MoveList()["knowledge cram"])
+        if self.level == 20:
+            self.newMove(MoveList()["bitch slap"])
         self.attack += 14
         self.defense += 12
         self.health += 10
