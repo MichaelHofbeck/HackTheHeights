@@ -22,11 +22,13 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.grass = pg.sprite.Group()
-        for x in range(10, 20):
-            Wall(self, x, 5)
+        self.tallgrass = pg.sprite.Group()
         for x in range(0, GRIDWIDTH):
             for j in range(0, GRIDHEIGHT):
                 Grass(self, x, j)
+        for x in range(5, 10):
+            for j in range(5, 10):
+                TallGrass(self, x, j)
         self.player = Player(self, 10, 10)
 
     def run(self):
