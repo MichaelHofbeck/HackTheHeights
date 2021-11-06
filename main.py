@@ -35,7 +35,7 @@ class Game:
                 TallGrass(self, x, j)
         self.danger = [randint(0, GRIDWIDTH), randint(0, GRIDHEIGHT)]
         Teacher1(self, self.danger[0], self.danger[1])
-        self.player = Player(self, 10, 10)
+        self.player = Player(self, 5, 5)
 
     def battle(self):
         self.all_sprites = pg.sprite.Group()
