@@ -5,6 +5,8 @@ import sys
 from GUI.Battle.screen import BattleBackground
 from GUI.settings import *
 from GUI.player_sprite import *
+from GUI.teacher_sprite import *
+from random import randint
 
 class Game:
     def __init__(self):
@@ -24,15 +26,18 @@ class Game:
         self.walls = pg.sprite.Group()
         self.grass = pg.sprite.Group()
         self.tallgrass = pg.sprite.Group()
+        self.teacher = pg.sprite.Group()
         for x in range(0, GRIDWIDTH):
             for j in range(0, GRIDHEIGHT):
                 Grass(self, x, j)
         for x in range(5, 10):
             for j in range(5, 10):
                 TallGrass(self, x, j)
+        self.danger = [randint(0, GRIDWIDTH), randint(0, GRIDHEIGHT)]
+        Teacher1(self, self.danger[0], self.danger[1])
         self.player = Player(self, 10, 10)
 
-    def battle_screen(self):
+    def battle(self):
         self.all_sprites = pg.sprite.Group()
         self.background = pg.sprite.Group()
         BattleBackground(self, 0, 0)
@@ -53,6 +58,8 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
+        if(self.player.x == self.danger[0] and self.player.y == self.danger[1]):
+            self.battle()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
