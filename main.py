@@ -3,6 +3,7 @@
 import pygame as pg
 import sys
 from GUI.settings import *
+from GUI.player_sprite import *
 
 class Game:
     def __init__(self):
@@ -16,6 +17,17 @@ class Game:
     def load_data(self):
         pass
 
+    def new(self):
+        # initialize all variables and do all the setup for a new game
+        self.all_sprites = pg.sprite.Group()
+        self.walls = pg.sprite.Group()
+        self.grass = pg.sprite.Group()
+        for x in range(10, 20):
+            Wall(self, x, 5)
+        for x in range(0, GRIDWIDTH):
+            for j in range(0, GRIDHEIGHT):
+                Grass(self, x, j)
+        self.player = Player(self, 10, 10)
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -23,11 +35,16 @@ class Game:
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
             self.events()
+            self.update()
             self.draw()
 
     def quit(self):
         pg.quit()
         sys.exit()
+
+    def update(self):
+        # update portion of the game loop
+        self.all_sprites.update()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -38,6 +55,7 @@ class Game:
     def draw(self):
         self.screen.fill(BGCOLOR)
         self.draw_grid()
+        self.all_sprites.draw(self.screen)
         pg.display.flip()
 
     def events(self):
@@ -67,5 +85,6 @@ class Game:
 g = Game()
 g.show_start_screen()
 while True:
+    g.new()
     g.run()
     g.show_go_screen()
