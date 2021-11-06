@@ -2,6 +2,7 @@
 
 import pygame as pg
 import sys
+from GUI.Battle.screen import BattleBackground
 from GUI.settings import *
 from GUI.player_sprite import *
 
@@ -30,6 +31,11 @@ class Game:
             for j in range(5, 10):
                 TallGrass(self, x, j)
         self.player = Player(self, 10, 10)
+
+    def battle_screen(self):
+        self.all_sprites = pg.sprite.Group()
+        self.background = pg.sprite.Group()
+        BattleBackground(self, 0, 0)
 
     def run(self):
         # game loop - set self.playing = False to end the game
