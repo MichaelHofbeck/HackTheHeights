@@ -17,7 +17,10 @@ class Game:
         self.load_data()
 
     def load_data(self):
-        pass
+        self.map_data = []
+        with open('Maps\map1.txt', 'rt') as f:
+            for line in f:
+                self.map_data.append(line)
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -30,10 +33,17 @@ class Game:
             for j in range(0, GRIDHEIGHT):
                 Grass(self, x, j)
         self.danger = [(randint(0, GRIDWIDTH), randint(0, GRIDHEIGHT))]
-        for x in range(5, 10):
-            for j in range(5, 10):
-                TallGrass(self, x, j)
-                self.danger += [(x, j)]
+        for row, tiles in enumerate(self.map_data):
+            for col, tile in enumerate(tiles):
+                if tile == '1':
+                    TallGrass(self, col, row)
+                    self.danger += [(col, row)]
+                if tile == 'P':
+                    self.player = Player(self, col, row)
+        # for x in range(5, 10):
+        #     for j in range(5, 10):
+        #         TallGrass(self, x, j)
+        #         self.danger += [(x, j)]
         Teacher1(self, self.danger[0][0], self.danger[0][1])
         self.dangersquares = len(self.danger)
         self.player = Player(self, 4, 5)
