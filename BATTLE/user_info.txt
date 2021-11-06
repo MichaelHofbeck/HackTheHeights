@@ -1,0 +1,6 @@
+Name: User
+Level: 1
+Attack: 10
+Defense: 10
+Health: 100
+Moves: Sigh, Eye Roll
