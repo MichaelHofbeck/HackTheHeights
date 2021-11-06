@@ -1,14 +1,25 @@
 class Fighter:
     
-    def __init__(self, name, level, attack, defense, health, moves):
+    def __init__(self, name, level, attack, defense, health, moves, experience, maxhealth):
         self.name = name
         self.level = level
         self.attack = attack
         self.defense = defense
         self.health = health
         self.moves = moves
+        self.experience = experience
+        self.maxhealth = maxhealth
 
-    
+    def addExperience(self, number):
+        self.experience -= number
+        if self.experience <= 0:
+            self.levelUp()
+        oldexp = self.experience
+        self.experience = self.level * 5 + 10 + oldexp
+
+    def fullHeal(self):
+        self.health = self.maxhealth
+
     def Damage(self, damage):
         self.health -= damage
 
