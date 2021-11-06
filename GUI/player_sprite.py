@@ -41,7 +41,7 @@ class Grass(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.grass
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.filepath = 'GUI\pngs\grass.png'
+        self.filepath = 'GUI/pngs/grass.png'
         image_resizer(self.filepath)
         self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
         self.rect = self.image.get_rect()
