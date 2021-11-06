@@ -18,13 +18,19 @@ class Player(pg.sprite.Sprite):
         self.position = (self.x, self.y)
 
     def move(self, dx=0, dy=0):
-        self.x += dx
-        self.y += dy
-        self.position = (self.x, self.y)
-        if dy == -1:
-            self.image = pg.image.load(self.filepath[0:-9] + "back-resized.png")
-        elif dy == 1:
-            self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
+        if not self.collide_with_walls(dx, dy):
+            self.x += dx
+            self.y += dy
+            self.position = (self.x, self.y)
+            if dy == -1:
+                self.image = pg.image.load(self.filepath[0:-9] + "back-resized.png")
+            elif dy == 1:
+                self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
+
+    def collide_with_walls(self, dx=0, dy=0):
+        if (self.x + dx == GRIDWIDTH or self.x + dx == -1) or (self.y + dy == GRIDHEIGHT or self.y + dy == -1):
+            return True
+        return False 
 
     def update(self):
         self.rect.x = self.x * TILESIZE
