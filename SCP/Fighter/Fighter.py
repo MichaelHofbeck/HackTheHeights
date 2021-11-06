@@ -31,10 +31,11 @@ class Fighter:
 
 
     def stats(self):
-        return 'Name:'
+        return 'Name: {}\n Level: {}\n Attack: {}\n Defense: {}\n Health: {}\n Moves: {}\n'.format(self.name, self.level, self.attack, self.defense, self.health, self.moves)
 
 
 
 
 
-#David = Fighter("David", 1, 25, 25, 90, ["Big D hammer, Shake and Bake"])
+David = Fighter("David", 1, 25, 25, 90, ["Big D hammer, Shake and Bake"])
+print(David.stats())
