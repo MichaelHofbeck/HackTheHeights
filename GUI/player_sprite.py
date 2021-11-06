@@ -1,13 +1,16 @@
 import pygame as pg
 from PIL import Image
 from GUI.settings import *
+from GUI.image_resizer import *
 
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.image = pg.image.load('GUI\pngs\player_front.png')
+        self.filepath = 'GUI/pngs/test.png'
+        image_resizer(self.filepath)
+        self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -39,10 +42,8 @@ class Grass(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.filepath = 'GUI\pngs\grass.png'
-        img = Image.open(self.filepath)
-        resized_img = img.resize((GRIDHEIGHT * 2, GRIDHEIGHT * 2))
-        resized_img.save(self.filepath)
-        self.image = pg.image.load(self.filepath)
+        image_resizer(self.filepath)
+        self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -54,11 +55,9 @@ class TallGrass(pg.sprite.Sprite):
         self.groups = game.all_sprites, game.grass
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.filepath = 'GUI\pngs\\tallgrass.png'
-        img = Image.open(self.filepath)
-        resized_img = img.resize((GRIDHEIGHT * 2, GRIDHEIGHT * 2))
-        resized_img.save(self.filepath)
-        self.image = pg.image.load(self.filepath)
+        self.filepath = 'GUI/pngs/tallgrass.png'
+        image_resizer(self.filepath)
+        self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
