@@ -16,7 +16,10 @@ def read_info():
     with open("user_info.txt", "r") as g:
         for i in g.readlines():
             split = i.index(":")
-            user_info[i[:split]] = i[split + 2:].strip()
+            if(i[:split] != "Moves" and i[:split] != "Name"):
+                user_info[i[:split]] = int(i[split + 2:])
+            else:
+                user_info[i[:split]] = i[split + 2:].strip()
         user_info["Moves"] = [x.strip() for x in user_info["Moves"].split(",")]
     return user_info
 
@@ -35,12 +38,14 @@ def write_user(user_fighter):
         f.write("Moves: " + move_str + "\n")
 
 # Returns instance of Fighter
-def make_fighter(name, level, attack, defense, health, moves):
-    return Fighter(name, level, attack, defense, health, moves)
+def make_fighter():
+    d = read_info()
+    name, level, attack, defense, health, moves, maxhealth, experience = d["Name"], d["Level"], d["Attack"], d["Defense"], d["Health"], d["Moves"], d["Experience"], d["MaxHealth"] 
+    return Fighter(name, level, attack, defense, health, moves, maxhealth, experience)
 
 # Returns size 2 array: (successful attack), (target fainted)
 def Attack(Attacker, Target, Move):
-    target_damage = Move.baseDmg * (Attacker.level / Target.level) * (Attacker.attack/Target.defense)
+    target_damage = round(Move.baseDmg * (1.3**(Attacker.level / Target.level)) * (1.3**(Attacker.attack/Target.defense)))
     success_chance = Move.successRt
     if random.random() < success_chance:
         Target.Damage(target_damage)
@@ -58,37 +63,45 @@ def Battle(user, fighter2):
     f2_poss_moves = fighter2.getMoves()
     f2_total_moves = len(f2_poss_moves)
     while(not user.IsDead() and not fighter2.IsDead()):
-        sc = Battle_Screen()
-        next_move = move_list[sc.move_select()]
+        print(user.name + ": " + str(user.health))
+        print(fighter2.name + ": " + str(fighter2.health))
+        next_move = move_list["eyeroll"]
         # Chooses a random move from the possible moves of computer
         f2_move = move_list[f2_poss_moves[random.randint(0, f2_total_moves - 1)]]
         if random.random() > .5:
             outcome = Attack(user, fighter2, next_move)
             # user move missed
-            if not outcome[1]:
+            if not outcome[0]:
                 pass
-            elif outcome[2]: break
+            elif outcome[1]: break
             outcome  = Attack(fighter2, user, f2_move)
             # opponent move missed
-            if not outcome[1]:
+            if not outcome[0]:
                 pass
         else:
             outcome  = Attack(fighter2, user, f2_move)
             # opponent move missed
-            if not outcome[1]:
+            if not outcome[0]:
                 pass
-            elif outcome[2]: break
+            elif outcome[1]: break
             outcome = Attack(user, fighter2, next_move)
             # user move missed
-            if not outcome[1]:
+            if not outcome[0]:
                 pass
 
     # Stat updates
-    user.addExperience(fighter2.level)
-    user.fullHeal()
+    user.addExperience(4*fighter2.level)
 
     # Storyline
-    if not user.IsDead(): return True
+    if not user.IsDead(): 
+        print("User Wins!")
+        return True
+    print("User Died!")
     return False
 
-
+# user = make_fighter()
+# opponent1 = Fighter(name="Naomi", level=1, attack=5, defense=15, health=20, moves=["ramble and shamble"], experience=1, maxhealth=20)
+# print(Battle(user, opponent1))
+# user.fullHeal()
+# opponent2 = Fighter(name="Carl", level=1, attack=15, defense=5, health=18, moves=["ramble and shamble"], experience=1, maxhealth=18)
+# print(Battle(user, opponent2))

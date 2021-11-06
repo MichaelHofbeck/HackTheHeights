@@ -1,15 +1,16 @@
 from Move.MovesList import MoveList
 class Fighter:
     
-    def __init__(self, name, level, attack, defense, health, moves, experience, maxhealth):
+    def __init__(self, name, level, attack, defense, health, moves, maxhealth, experience = 0):
         self.name = name
         self.level = level
         self.attack = attack
         self.defense = defense
         self.health = health
         self.moves = moves
-        self.experience = experience
         self.maxhealth = maxhealth
+        self.experience = experience
+        
 
     def addExperience(self, number):
         self.experience -= number
@@ -51,9 +52,6 @@ class Fighter:
 
 
     def stats(self):
-        return 'Name: {}\n Level: {}\n Attack: {}\n Defense: {}\n Health: {}\n Moves: {}\n'.format(self.name, self.level, self.attack, self.defense, self.health, self.moves)
-
-
-
+        return 'Name: {}\n Level: {}\n Attack: {}\n Defense: {}\n Health: {}\n Moves: {}\n Maxhealth: {}\n'.format(self.name, self.level, self.attack, self.defense, self.health, self.moves, self.maxhealth)
 
 

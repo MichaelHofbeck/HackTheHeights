@@ -1,4 +1,4 @@
-Name: User
+Name: Minh
 Attack: 10
 Defense: 10
 Experience: 10

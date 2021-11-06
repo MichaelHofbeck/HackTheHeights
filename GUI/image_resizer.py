@@ -1,10 +1,7 @@
 from PIL import Image
-from settings import *
+from GUI.settings import *
 
-filepath = "GUI/pngs/battlebg.png"
-
-# Image.open() can also open other image types
-img = Image.open(filepath)
-# WIDTH and HEIGHT are integers
-resized_img = img.resize((HEIGHT, WIDTH))
-resized_img.save(filepath)
+def image_resizer(filepath, width_size = TILESIZE, height_size = TILESIZE):
+    img = Image.open(filepath)
+    resized_img = img.resize((width_size, height_size))
+    resized_img.save(filepath[0:-4] + "-resized.png")
