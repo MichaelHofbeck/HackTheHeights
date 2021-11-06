@@ -8,16 +8,23 @@ class Player(pg.sprite.Sprite):
         self.groups = game.all_sprites
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
-        self.filepath = 'GUI/pngs/test.png'
+        self.filepath = 'GUI/pngs/test-front.png'
         image_resizer(self.filepath)
+        image_resizer(self.filepath[0:-9] + 'back.png')
         self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
+        self.position = (self.x, self.y)
 
     def move(self, dx=0, dy=0):
         self.x += dx
         self.y += dy
+        self.position = (self.x, self.y)
+        if dy == -1:
+            self.image = pg.image.load(self.filepath[0:-9] + "back-resized.png")
+        elif dy == 1:
+            self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
 
     def update(self):
         self.rect.x = self.x * TILESIZE

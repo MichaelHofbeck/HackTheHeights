@@ -7,7 +7,6 @@ from GUI.settings import *
 from GUI.player_sprite import *
 from GUI.teacher_sprite import *
 from random import randint
-
 class Game:
     def __init__(self):
         pg.init()
@@ -30,12 +29,14 @@ class Game:
         for x in range(0, GRIDWIDTH):
             for j in range(0, GRIDHEIGHT):
                 Grass(self, x, j)
+        self.danger = [(randint(0, GRIDWIDTH), randint(0, GRIDHEIGHT))]
         for x in range(5, 10):
             for j in range(5, 10):
                 TallGrass(self, x, j)
-        self.danger = [randint(0, GRIDWIDTH), randint(0, GRIDHEIGHT)]
-        Teacher1(self, self.danger[0], self.danger[1])
-        self.player = Player(self, 5, 5)
+                self.danger += [(x, j)]
+        Teacher1(self, self.danger[0][0], self.danger[0][1])
+        self.dangersquares = len(self.danger)
+        self.player = Player(self, 4, 5)
 
     def battle(self):
         self.all_sprites = pg.sprite.Group()
@@ -58,8 +59,13 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
-        if(self.player.x == self.danger[0] and self.player.y == self.danger[1]):
+        if(self.player.position == self.danger[0]):
             self.battle()
+        for x in range(self.dangersquares):
+            if self.player.position == self.danger[x]:
+                if self.random_key == 5:
+                    self.battle()
+
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -79,6 +85,7 @@ class Game:
             if event.type == pg.QUIT:
                 self.quit()
             if event.type == pg.KEYDOWN:
+                self.random_key = randint(0, 9)
                 if event.key == pg.K_ESCAPE:
                     self.quit()
                 if event.key == pg.K_LEFT:
