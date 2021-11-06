@@ -57,5 +57,3 @@ class Fighter:
 
 
 
-David = Fighter("David", 1, 25, 25, 90, ["Big D hammer, Shake and Bake"])
-print(David.stats())
