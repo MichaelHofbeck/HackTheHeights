@@ -1,5 +1,5 @@
 #returns dictionary with move name as key and move class as value
-from Move import Move
+from SCP.Move.Move import Move
 def MoveList():
     ret = dict()
     #student moves
