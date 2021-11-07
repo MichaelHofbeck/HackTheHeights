@@ -2,11 +2,17 @@
 
 import pygame as pg
 import sys
-from GUI.Battle.screen import BattleBackground
+from time import sleep
+from SCP.Fighter.Fighter import Fighter
+from GUI.Battle.screen import *
 from GUI.settings import *
 from GUI.player_sprite import *
 from GUI.teacher_sprite import *
+from GUI.tilemap import *
 from random import randint
+from pvp_battle import *
+from pvp_battle import get_user_moves
+
 class Game:
     def __init__(self):
         pg.init()
@@ -17,7 +23,7 @@ class Game:
         self.load_data()
 
     def load_data(self):
-        pass
+        self.map = Map('Maps\map1.txt')
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -26,22 +32,33 @@ class Game:
         self.grass = pg.sprite.Group()
         self.tallgrass = pg.sprite.Group()
         self.teacher = pg.sprite.Group()
-        for x in range(0, GRIDWIDTH):
-            for j in range(0, GRIDHEIGHT):
+        self.battling = False
+        for x in range(0, self.map.tilewidth):
+            for j in range(0, self.map.tileheight):
                 Grass(self, x, j)
-        self.danger = [(randint(0, GRIDWIDTH), randint(0, GRIDHEIGHT))]
-        for x in range(5, 10):
-            for j in range(5, 10):
-                TallGrass(self, x, j)
-                self.danger += [(x, j)]
+        self.danger = [(randint(3, self.map.tilewidth - 3), randint(3, self.map.tileheight - 3))]
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
+                if tile == '1':
+                    TallGrass(self, col, row)
+                    self.danger += [(col, row)]
+
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
+                if tile == 'P':
+                   self.player = Player(self, col, row, self.map.tilewidth, self.map.tileheight)
         Teacher1(self, self.danger[0][0], self.danger[0][1])
         self.dangersquares = len(self.danger)
-        self.player = Player(self, 4, 5)
+        self.camera = Camera(self.map.width, self.map.height)
 
     def battle(self):
+        self.battling = True
         self.all_sprites = pg.sprite.Group()
         self.background = pg.sprite.Group()
         BattleBackground(self, 0, 0)
+        Draw_moves(get_user_moves, self.screen)
+        Battle(make_fighter(), Fighter(name="Naomi", level=1, attack=5, defense=15, health=20, moves=["ramble and shamble"], experience=1, maxhealth=20))
+        sleep(5)
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -59,11 +76,14 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
+        self.camera.update(self.player)
         if(self.player.position == self.danger[0]):
+            self.camera.reset()
             self.battle()
         for x in range(self.dangersquares):
             if self.player.position == self.danger[x]:
                 if self.random_key == 5:
+                    self.camera.reset()
                     self.battle()
 
 
@@ -76,7 +96,8 @@ class Game:
     def draw(self):
         self.screen.fill(BGCOLOR)
         self.draw_grid()
-        self.all_sprites.draw(self.screen)
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
         pg.display.flip()
 
     def events(self):
@@ -85,17 +106,35 @@ class Game:
             if event.type == pg.QUIT:
                 self.quit()
             if event.type == pg.KEYDOWN:
-                self.random_key = randint(0, 9)
-                if event.key == pg.K_ESCAPE:
-                    self.quit()
-                if event.key == pg.K_LEFT:
-                    self.player.move(dx=-1)
-                if event.key == pg.K_RIGHT:
-                    self.player.move(dx=1)
-                if event.key == pg.K_UP:
-                    self.player.move(dy=-1)
-                if event.key == pg.K_DOWN:
-                    self.player.move(dy=1)
+                if self.battling == False:
+                    self.random_key = randint(0, 14)
+                    if event.key == pg.K_ESCAPE:
+                        self.quit()
+                    if event.key == pg.K_LEFT:
+                        self.player.move(dx=-1)
+                    if event.key == pg.K_RIGHT:
+                        self.player.move(dx=1)
+                    if event.key == pg.K_UP:
+                        self.player.move(dy=-1)
+                    if event.key == pg.K_DOWN:
+                        self.player.move(dy=1)
+            if event.type == pg.MOUSEBUTTONDOWN:
+                pos = pg.mouse.get_pos()
+                if pos[0] > WIDTH*(980/1240):
+                    if pos[1] < HEIGHT/4:
+                        print("1")
+                        pass
+                    elif pos[1] < HEIGHT/2:
+                        print("2")
+                        pass
+                    elif pos[1] < 3*HEIGHT/4:
+                        print("3")
+                        pass
+                    else:
+                        print("4")
+                        pass
+
+
 
     def show_start_screen(self):
         pass
