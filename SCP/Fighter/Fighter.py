@@ -1,5 +1,5 @@
-from Move.MovesList import MoveList
-from random import randint, random
+from Move.MovesList import moveType
+from random import random
 
 class Fighter:
     
@@ -31,17 +31,16 @@ class Fighter:
         if self.health <= 0:
             return True
         return False
+    
 
     def levelUp(self):
         self.level += 1
-        if self.level == 5:
-            self.newMove(MoveList()["eyeroll"])
-        if self.level == 10:
-            self.newMove(MoveList()["homework finesse"])
-        if self.level == 15:
-            self.newMove(MoveList()["knowledge cram"])
-        if self.level == 20:
-            self.newMove(MoveList()["bitch slap"])
+        addTrue = False
+        #adds a random new move to the users new moves
+        while addTrue == False:
+            if moveType("user")[random.choice()] not in self.moves:
+                self.newMove(moveType("user")[random.choice()])
+                addTrue = True
         self.attack += random.randint(5, 15)
         self.defense += random.randint(5, 15)
         self.health += random.randint(5, 15)
@@ -56,4 +55,4 @@ class Fighter:
     def stats(self):
         return 'Name: {}\n Level: {}\n Attack: {}\n Defense: {}\n Health: {}\n Moves: {}\n Maxhealth: {}\n'.format(self.name, self.level, self.attack, self.defense, self.health, self.moves, self.maxhealth)
 
-
+player = Fighter("Minh", 1, 5, 5, 10, [])
