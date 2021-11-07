@@ -157,6 +157,9 @@ class Game:
         self.draw_grid()
         for sprite in self.all_sprites:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
+        # moves drawing goes here
+        if self.battling:
+            draw_moves(self.screen)
         pg.display.flip()
 
     def events(self):
