@@ -112,7 +112,7 @@ class Game:
                         self.player.move(dy=-1)
                     if event.key == pg.K_DOWN:
                         self.player.move(dy=1)
-            if event.type = pg.MOUSEBUTTONDOWN:
+            if event.type == pg.MOUSEBUTTONDOWN:
                 pos = pg.mouse.get_pos()
                 if pos[0] > WIDTH*(980/1240):
                     if pos[1] < HEIGHT/4:
