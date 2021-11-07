@@ -95,10 +95,11 @@ class Game:
     def battle_mechanics(self, opponent):
             # battlgebg.background()
             #Draw_moves(get_user_moves, self.screen)
-            Battle(make_fighter(), opponent, self.move_index)
+            user = make_fighter()
+            Battle(user, opponent, self.move_index)
             #Battle(make_fighter(), Fighter(name="Naomi", level=1, attack=5, defense=15, health=20, moves=["ramble and shamble"], experience=1, maxhealth=20))
             self.battle_pos = self.player.position
-            if make_fighter().IsDead or opponent.IsDead():
+            if (user.IsDead() or opponent.IsDead()):
                 self.battling = False
                 self.move_index = -1
                 self.reactivate()
@@ -165,20 +166,18 @@ class Game:
                     if event.key == pg.K_DOWN:
                         self.player.move(dy=1)
             if event.type == pg.MOUSEBUTTONDOWN:
-                pos = pg.mouse.get_pos()
-                if pos[0] > WIDTH*(980/1240):
-                    if pos[1] < HEIGHT/4:
-                        self.move_index = 0
-                        pass
-                    elif pos[1] < HEIGHT/2:
-                        self.move_index = 1
-                        pass
-                    elif pos[1] < 3*HEIGHT/4:
-                        self.move_index = 2
-                        pass
-                    else:
-                        self.move_index = 3
-                        pass
+                if self.battling == True:
+                    pos = pg.mouse.get_pos()
+                    if pos[0] > WIDTH*(980/1240):
+                        if pos[1] < HEIGHT/4:
+                            self.move_index = 0
+                        elif pos[1] < HEIGHT/2:
+                            self.move_index = 1
+                        elif pos[1] < 3*HEIGHT/4:
+                            self.move_index = 2
+                        else:
+                            self.move_index = 3
+                        print(self.move_index)
 
 
 
