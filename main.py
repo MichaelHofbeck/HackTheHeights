@@ -13,7 +13,7 @@ from GUI.tilemap import *
 from random import randint
 from SCP.BushFIghters.BushFighters import *
 from pvp_battle import *
-from pvp_battle import get_user_moves
+from pvp_battle import get_user_moves_and_name, get_user_moves
 
 class Game:
     def __init__(self):
@@ -85,6 +85,7 @@ class Game:
             number_of_bushfighters = len(bush_fighters) - 1
             random_fighter = randint(0, number_of_bushfighters)
             opponent = bush_fighters[random_fighter]
+            self.opponent_name = opponent.name
             opponent_sprite = bush_fighters[random_fighter].sprite
             BattleBackground(self, 0, 0)
             BattleForegroundUser(self, 0, 0)
@@ -147,7 +148,7 @@ class Game:
             self.screen.blit(sprite.image, self.camera.apply(sprite))
         # moves drawing goes here
         if self.battling:
-            draw_moves(self.screen)
+            draw_moves_and_names(self.screen, self.opponent_name)
         pg.display.flip()
 
     def events(self):
