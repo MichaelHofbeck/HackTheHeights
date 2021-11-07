@@ -6,6 +6,7 @@ from GUI.Battle.screen import BattleBackground
 from GUI.settings import *
 from GUI.player_sprite import *
 from GUI.teacher_sprite import *
+from GUI.tilemap import *
 from random import randint
 class Game:
     def __init__(self):
@@ -17,10 +18,7 @@ class Game:
         self.load_data()
 
     def load_data(self):
-        self.map_data = []
-        with open('Maps\map1.txt', 'rt') as f:
-            for line in f:
-                self.map_data.append(line)
+        self.map = Map('Maps\map1.txt')
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -29,24 +27,23 @@ class Game:
         self.grass = pg.sprite.Group()
         self.tallgrass = pg.sprite.Group()
         self.teacher = pg.sprite.Group()
-        for x in range(0, GRIDWIDTH):
-            for j in range(0, GRIDHEIGHT):
+        for x in range(0, self.map.tilewidth):
+            for j in range(0, self.map.tileheight):
                 Grass(self, x, j)
-        self.danger = [(randint(0, GRIDWIDTH), randint(0, GRIDHEIGHT))]
-        for row, tiles in enumerate(self.map_data):
+        self.danger = [(randint(3, self.map.tilewidth - 3), randint(3, self.map.tileheight - 3))]
+        for row, tiles in enumerate(self.map.data):
             for col, tile in enumerate(tiles):
                 if tile == '1':
                     TallGrass(self, col, row)
                     self.danger += [(col, row)]
+
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
                 if tile == 'P':
-                    self.player = Player(self, col, row)
-        # for x in range(5, 10):
-        #     for j in range(5, 10):
-        #         TallGrass(self, x, j)
-        #         self.danger += [(x, j)]
+                   self.player = Player(self, col, row, self.map.tilewidth, self.map.tileheight)
         Teacher1(self, self.danger[0][0], self.danger[0][1])
         self.dangersquares = len(self.danger)
-        self.player = Player(self, 4, 5)
+        self.camera = Camera(self.map.width, self.map.height)
 
     def battle(self):
         self.all_sprites = pg.sprite.Group()
@@ -69,11 +66,14 @@ class Game:
     def update(self):
         # update portion of the game loop
         self.all_sprites.update()
+        self.camera.update(self.player)
         if(self.player.position == self.danger[0]):
             self.battle()
+            self.camera.reset()
         for x in range(self.dangersquares):
             if self.player.position == self.danger[x]:
                 if self.random_key == 5:
+                    self.camera.reset()
                     self.battle()
 
 
@@ -86,7 +86,8 @@ class Game:
     def draw(self):
         self.screen.fill(BGCOLOR)
         self.draw_grid()
-        self.all_sprites.draw(self.screen)
+        for sprite in self.all_sprites:
+            self.screen.blit(sprite.image, self.camera.apply(sprite))
         pg.display.flip()
 
     def events(self):
@@ -95,7 +96,7 @@ class Game:
             if event.type == pg.QUIT:
                 self.quit()
             if event.type == pg.KEYDOWN:
-                self.random_key = randint(0, 9)
+                self.random_key = randint(0, 14)
                 if event.key == pg.K_ESCAPE:
                     self.quit()
                 if event.key == pg.K_LEFT:

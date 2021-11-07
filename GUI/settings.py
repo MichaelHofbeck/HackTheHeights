@@ -10,7 +10,7 @@ RED = (255, 0, 0)
 YELLOW = (255, 255 ,0)
 
 # game settings
-WIDTH = 1240
+WIDTH = 1020
 HEIGHT = 600
 FPS = 60
 TITLE = "Tilemap Demo"
