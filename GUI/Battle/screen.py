@@ -4,6 +4,7 @@
 import pygame as pg
 from GUI.settings import *
 from GUI.image_resizer import *
+from pvp_battle import get_user_moves
 
 class BattleBackground(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -18,3 +19,11 @@ class BattleBackground(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+def draw_moves(move_list):
+    font = pygame.font.SysFont(None, 24)
+    moves = get_user_moves()
+    assert len(moves) <= 4, ("Too many Moves!!")
+    for i, move_str in enumerate(moves):
+        img = font.render(move_str, True, BLUE)
+        screen.blit(img, (1000, 10+(i*150))

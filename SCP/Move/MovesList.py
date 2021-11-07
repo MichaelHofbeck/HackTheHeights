@@ -24,6 +24,7 @@ def MoveList():
     ret["body slam"] = Move(.70, 15)
     ret["pop quiz"] = Move(.85, 20)
     ret["midterm"] = Move(.8, 25)
+    ret["zoom wating room..."] = Move(.98, 5)
 
     ret["homework assist"] = Move(.9, -10)
     ret["tbh idk"] = Move(.9, 12)
