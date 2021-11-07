@@ -49,6 +49,11 @@ def make_fighter():
 def get_user_moves():
     return read_info()["Moves"]
 
+# returns list of user moves and name
+def get_user_moves_and_name():
+    x = read_info()
+    return x["Moves"], x["Name"]
+
 # Returns size 2 array: (successful attack), (target fainted)
 def Attack(Attacker, Target, Move):
     target_damage = round(Move.baseDmg * (1.1**(Attacker.level / Target.level)) * (1.1**(Attacker.attack/Target.defense)))
