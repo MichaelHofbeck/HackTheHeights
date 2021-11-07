@@ -2,13 +2,17 @@
 
 import pygame as pg
 import sys
-from GUI.Battle.screen import BattleBackground
+from time import sleep
+from SCP.Fighter.Fighter import Fighter
+from GUI.Battle.screen import *
 from GUI.settings import *
 from GUI.player_sprite import *
 from GUI.teacher_sprite import *
 from GUI.tilemap import *
 from random import randint
 from pvp_battle import *
+from pvp_battle import get_user_moves
+
 class Game:
     def __init__(self):
         pg.init()
@@ -52,7 +56,9 @@ class Game:
         self.all_sprites = pg.sprite.Group()
         self.background = pg.sprite.Group()
         BattleBackground(self, 0, 0)
-        Battle(self.player, )
+        Draw_moves(get_user_moves, self.screen)
+        Battle(make_fighter(), Fighter(name="Naomi", level=1, attack=5, defense=15, health=20, moves=["ramble and shamble"], experience=1, maxhealth=20))
+        sleep(5)
 
     def run(self):
         # game loop - set self.playing = False to end the game
