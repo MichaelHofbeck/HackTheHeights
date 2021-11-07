@@ -23,7 +23,7 @@ class Game:
         self.load_data()
 
     def load_data(self):
-        self.map = Map('Maps\map1.txt')
+        self.map = Map('Maps/map1.txt')
 
     def new(self):
         # initialize all variables and do all the setup for a new game
