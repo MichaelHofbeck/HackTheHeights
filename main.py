@@ -2,6 +2,8 @@
 
 from os import curdir
 import pygame as pg
+from playsound import playsound
+import os
 import sys
 from time import sleep
 from SCP.Fighter.Fighter import Fighter
@@ -25,6 +27,8 @@ class Game:
         self.load_data()
         self.battle_pos = None
         self.move_index = -1
+        self.backgroundmusic = pg.mixer.Sound('GUI/Songs/tets.mp3')
+        self.battlemusic = pg.mixer.Sound('GUI/Songs/battle.mp3')
 
     def load_data(self):
         self.map = Map('Maps\map1.txt')
@@ -57,6 +61,8 @@ class Game:
 
     def reactivate(self):
         # initialize all variables and do all the setup for a new game
+        self.battlemusic.stop()
+        self.backgroundmusic.play()
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.grass = pg.sprite.Group()
@@ -94,6 +100,8 @@ class Game:
                 self.battle_mechanics(opponent)
 
     def battle_mechanics(self, opponent):
+            self.backgroundmusic.stop()
+            self.battlemusic.play()
             # battlgebg.background()
             #Draw_moves(get_user_moves, self.screen)
             user = make_fighter()
@@ -103,12 +111,16 @@ class Game:
             if (user.IsDead() or opponent.IsDead()):
                 self.battling = False
                 self.move_index = -1
+                self.battlemusic.stop()
+                self.backgroundmusic.play()
                 self.reactivate()
                 self.run()
         #sleep(5)
 
     def run(self):
         # game loop - set self.playing = False to end the game
+        self.battlemusic.stop()
+        self.backgroundmusic.play()
         self.playing = True
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
