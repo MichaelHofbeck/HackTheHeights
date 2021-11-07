@@ -43,7 +43,7 @@ class BattleForegroundOpponent(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.filepath = opponent
-        image_resizer(self.filepath, WIDTH // 4, HEIGHT // 4)
+        image_resizer(self.filepath, WIDTH // 3, HEIGHT // 3)
         self.image = pg.image.load(self.filepath[0:-4] + "-resized.png")
         self.rect = self.image.get_rect()
         self.x = x

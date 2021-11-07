@@ -31,7 +31,8 @@ class Game:
         self.battlemusic = pg.mixer.Sound('GUI/Songs/battle.mp3')
 
     def load_data(self):
-        self.map = Map('Maps/map1.txt')
+        map_number = randint(1, 3)
+        self.map = Map('Maps\map' + str(map_number) + '.txt')
 
     def new(self):
         # initialize all variables and do all the setup for a new game
@@ -40,6 +41,7 @@ class Game:
         self.grass = pg.sprite.Group()
         self.tallgrass = pg.sprite.Group()
         self.teacher = pg.sprite.Group()
+        self.generated = False
         self.battling = False
         for x in range(0, self.map.tilewidth):
             for j in range(0, self.map.tileheight):
@@ -63,6 +65,7 @@ class Game:
         # initialize all variables and do all the setup for a new game
         self.battlemusic.stop()
         self.backgroundmusic.play()
+        self.generated = False
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.grass = pg.sprite.Group()
@@ -86,18 +89,20 @@ class Game:
     def battle_screen(self):
         if self.battle_pos != self.player.position:
             self.battling = True
+            if not self.generated:
+                number_of_bushfighters = len(bush_fighters) - 1
+                self.random_fighter = randint(0, number_of_bushfighters)
+                self.opponent = bush_fighters[self.random_fighter]
+            self.opponent_name = self.opponent.name
+            opponent_sprite = self.opponent.sprite
+            self.generated = True
             self.all_sprites = pg.sprite.Group()
             self.background = pg.sprite.Group()
-            number_of_bushfighters = len(bush_fighters) - 1
-            random_fighter = randint(0, number_of_bushfighters)
-            opponent = bush_fighters[random_fighter]
-            self.opponent_name = opponent.name
-            opponent_sprite = bush_fighters[random_fighter].sprite
             BattleBackground(self, 0, 0)
             BattleForegroundUser(self, 0, 0)
             BattleForegroundOpponent(self, opponent_sprite, 0, 0)
             if self.move_index != -1:
-                self.battle_mechanics(opponent)
+                self.battle_mechanics(self.opponent)
 
     def battle_mechanics(self, opponent):
             self.backgroundmusic.stop()
@@ -139,6 +144,9 @@ class Game:
         if(self.player.position == self.danger[0]):
             self.camera.reset()
             self.curr_position = self.player.position
+            if not self.generated:
+                self.opponent = random.choice([Carl, Naomi])
+            self.generated = True
             self.battle_screen()
         for x in range(self.dangersquares):
             if self.player.position == self.danger[x]:
