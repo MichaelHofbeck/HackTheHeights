@@ -9,6 +9,7 @@ from SCP.Fighter.Fighter import Fighter
 from SCP.Move.MovesList import MoveList
 # from GUI.Battle.screen import Battle_Screen
 import random
+from time import sleep
 
 # Reads user fighter data in user_info.txt
 def read_info():
@@ -62,14 +63,14 @@ def Attack(Attacker, Target, Move):
 
 # Runs Battle functions
 # Returns True if user wins, else False
-def Battle(user, fighter2):
+def Battle(user, fighter2, move = -1):
     move_list = MoveList()
     f2_poss_moves = fighter2.getMoves()
     f2_total_moves = len(f2_poss_moves)
     while(not user.IsDead() and not fighter2.IsDead()):
         print(user.name + ": " + str(user.health))
         print(fighter2.name + ": " + str(fighter2.health))
-        next_move = move_list["eyeroll"]
+        next_move = move_list[get_user_moves()[move]]
         # Chooses a random move from the possible moves of computer
         f2_move = move_list[f2_poss_moves[random.randint(0, f2_total_moves - 1)]]
         if random.random() > .5:

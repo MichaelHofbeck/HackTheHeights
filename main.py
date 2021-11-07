@@ -1,5 +1,6 @@
 # main.py
 
+from os import curdir
 import pygame as pg
 import sys
 from time import sleep
@@ -10,6 +11,7 @@ from GUI.player_sprite import *
 from GUI.teacher_sprite import *
 from GUI.tilemap import *
 from random import randint
+from SCP.BushFIghters.BushFighters import *
 from pvp_battle import *
 from pvp_battle import get_user_moves
 
@@ -21,6 +23,8 @@ class Game:
         self.clock = pg.time.Clock()
         pg.key.set_repeat(500, 100)
         self.load_data()
+        self.battle_pos = None
+        self.move_index = -1
 
     def load_data(self):
         self.map = Map('Maps\map1.txt')
@@ -51,14 +55,55 @@ class Game:
         self.dangersquares = len(self.danger)
         self.camera = Camera(self.map.width, self.map.height)
 
-    def battle(self):
-        self.battling = True
+    def reactivate(self):
+        # initialize all variables and do all the setup for a new game
         self.all_sprites = pg.sprite.Group()
-        self.background = pg.sprite.Group()
-        BattleBackground(self, 0, 0)
-        Draw_moves(get_user_moves, self.screen)
-        Battle(make_fighter(), Fighter(name="Naomi", level=1, attack=5, defense=15, health=20, moves=["ramble and shamble"], experience=1, maxhealth=20))
-        sleep(5)
+        self.walls = pg.sprite.Group()
+        self.grass = pg.sprite.Group()
+        self.tallgrass = pg.sprite.Group()
+        self.teacher = pg.sprite.Group()
+        self.battling = False
+        for x in range(0, self.map.tilewidth):
+            for j in range(0, self.map.tileheight):
+                Grass(self, x, j)
+        self.danger = [(randint(3, self.map.tilewidth - 3), randint(3, self.map.tileheight - 3))]
+        for row, tiles in enumerate(self.map.data):
+            for col, tile in enumerate(tiles):
+                if tile == '1':
+                    TallGrass(self, col, row)
+                    self.danger += [(col, row)]
+        self.player = Player(self, self.curr_position[0], self.curr_position[1], self.map.tilewidth, self.map.tileheight)
+        Teacher1(self, self.danger[0][0], self.danger[0][1])
+        self.dangersquares = len(self.danger)
+        self.camera = Camera(self.map.width, self.map.height)
+
+    def battle_screen(self):
+        if self.battle_pos != self.player.position:
+            self.battling = True
+            self.all_sprites = pg.sprite.Group()
+            self.background = pg.sprite.Group()
+            number_of_bushfighters = len(bush_fighters) - 1
+            random_fighter = randint(0, number_of_bushfighters)
+            opponent = bush_fighters[random_fighter]
+            opponent_sprite = bush_fighters[random_fighter].sprite
+            BattleBackground(self, 0, 0)
+            BattleForegroundUser(self, 0, 0)
+            BattleForegroundOpponent(self, opponent_sprite, 0, 0)
+            if self.move_index != -1:
+                self.battle_mechanics(opponent)
+
+    def battle_mechanics(self, opponent):
+            # battlgebg.background()
+            #Draw_moves(get_user_moves, self.screen)
+            Battle(make_fighter(), opponent, self.move_index)
+            #Battle(make_fighter(), Fighter(name="Naomi", level=1, attack=5, defense=15, health=20, moves=["ramble and shamble"], experience=1, maxhealth=20))
+            self.battle_pos = self.player.position
+            if make_fighter().IsDead or opponent.IsDead():
+                self.battling = False
+                self.move_index = -1
+                self.reactivate()
+                self.run()
+        #sleep(5)
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -79,13 +124,14 @@ class Game:
         self.camera.update(self.player)
         if(self.player.position == self.danger[0]):
             self.camera.reset()
-            self.battle()
+            self.curr_position = self.player.position
+            self.battle_screen()
         for x in range(self.dangersquares):
             if self.player.position == self.danger[x]:
                 if self.random_key == 5:
                     self.camera.reset()
-                    self.battle()
-
+                    self.curr_position = self.player.position
+                    self.battle_screen()
 
     def draw_grid(self):
         for x in range(0, WIDTH, TILESIZE):
@@ -122,16 +168,16 @@ class Game:
                 pos = pg.mouse.get_pos()
                 if pos[0] > WIDTH*(980/1240):
                     if pos[1] < HEIGHT/4:
-                        print("1")
+                        self.move_index = 0
                         pass
                     elif pos[1] < HEIGHT/2:
-                        print("2")
+                        self.move_index = 1
                         pass
                     elif pos[1] < 3*HEIGHT/4:
-                        print("3")
+                        self.move_index = 2
                         pass
                     else:
-                        print("4")
+                        self.move_index = 3
                         pass
 
 
