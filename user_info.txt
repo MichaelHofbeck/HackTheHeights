@@ -1,8 +1,8 @@
 Name: Minh
-Attack: 10
+Attack: 5
 Defense: 10
 Experience: 10
 Health: 30
 Level: 1
 MaxHealth: 30
-Moves: Sigh, Eye Roll
+Moves: sigh, eyeroll, rage, scary face

@@ -4,11 +4,13 @@
 '''
 This program holds the logic for the fighting backend between two Fighters
 '''
-
+from GUI.settings import *
+import pygame as pg
 from SCP.Fighter.Fighter import Fighter
 from SCP.Move.MovesList import MoveList
 # from GUI.Battle.screen import Battle_Screen
 import random
+from time import sleep
 
 # Reads user fighter data in user_info.txt
 def read_info():
@@ -49,7 +51,7 @@ def get_user_moves():
 
 # Returns size 2 array: (successful attack), (target fainted)
 def Attack(Attacker, Target, Move):
-    target_damage = round(Move.baseDmg * (1.3**(Attacker.level / Target.level)) * (1.3**(Attacker.attack/Target.defense)))
+    target_damage = round(Move.baseDmg * (1.1**(Attacker.level / Target.level)) * (1.1**(Attacker.attack/Target.defense)))
     success_chance = Move.successRt
     if random.random() < success_chance:
         Target.Damage(target_damage)
@@ -62,37 +64,39 @@ def Attack(Attacker, Target, Move):
 
 # Runs Battle functions
 # Returns True if user wins, else False
-def Battle(user, fighter2):
+def Battle(user, fighter2, move = -1):
     move_list = MoveList()
     f2_poss_moves = fighter2.getMoves()
     f2_total_moves = len(f2_poss_moves)
+    print(get_user_moves())
     while(not user.IsDead() and not fighter2.IsDead()):
         print(user.name + ": " + str(user.health))
         print(fighter2.name + ": " + str(fighter2.health))
-        next_move = move_list["eyeroll"]
+        next_move = move_list[get_user_moves()[move]]
         # Chooses a random move from the possible moves of computer
         f2_move = move_list[f2_poss_moves[random.randint(0, f2_total_moves - 1)]]
+        print(get_user_moves()[move], next_move.successRt, next_move.baseDmg)
         if random.random() > .5:
             outcome = Attack(user, fighter2, next_move)
-            # user move missed
-            if not outcome[0]:
-                pass
-            elif outcome[1]: break
+            if outcome[1]: break
             outcome  = Attack(fighter2, user, f2_move)
-            # opponent move missed
-            if not outcome[0]:
-                pass
+            if outcome[1]: break
         else:
             outcome  = Attack(fighter2, user, f2_move)
-            # opponent move missed
-            if not outcome[0]:
-                pass
-            elif outcome[1]: break
+            if outcome[1]: break
             outcome = Attack(user, fighter2, next_move)
-            # user move missed
-            if not outcome[0]:
-                pass
-
+            if outcome[1]: break
+        while(pg.event.wait().type != pg.MOUSEBUTTONDOWN):
+            pos = pg.mouse.get_pos()
+            if pos[0] > WIDTH*(980/1240):
+                if pos[1] < HEIGHT/4:
+                    move = 0
+                elif pos[1] < HEIGHT/2:
+                    move = 1
+                elif pos[1] < 3*HEIGHT/4:
+                    move = 2
+                else:
+                    move = 3
     # Stat updates
     user.addExperience(4*fighter2.level)
 
