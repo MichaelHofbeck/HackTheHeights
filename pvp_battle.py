@@ -49,7 +49,7 @@ def get_user_moves():
 
 # Returns size 2 array: (successful attack), (target fainted)
 def Attack(Attacker, Target, Move):
-    target_damage = rou)nd(Move.baseDmg * (1.3**(Attacker.level / Target.level)) * (1.3**(Attacker.attack/Target.defense)))
+    target_damage = round(Move.baseDmg * (1.3**(Attacker.level / Target.level)) * (1.3**(Attacker.attack/Target.defense)))
     success_chance = Move.successRt
     if random.random() < success_chance:
         Target.Damage(target_damage)
