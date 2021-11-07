@@ -5,7 +5,7 @@ import pygame as pg
 from GUI.settings import *
 from GUI.image_resizer import *
 from SCP.Fighter.Fighter import *
-from pvp_battle import get_user_moves
+from pvp_battle import get_user_moves_and_name
 
 class BattleBackground(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -51,10 +51,15 @@ class BattleForegroundOpponent(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE + 525
         self.rect.y = y * TILESIZE + 75
 
-def draw_moves(screen):
+def draw_moves_and_names(screen, opponent_name):
     font = pg.font.SysFont("Georgia", 36)
-    moves = get_user_moves()
+    moves, username = get_user_moves_and_name()
     assert len(moves) <= 4, ("Too many Moves!!")
     for i, move_str in enumerate(moves):
         img = font.render(move_str, True, DARKGREY)
         screen.blit(img, (20 + round(WIDTH*(980/1240)), 15+(i*150)))
+    img = font.render(username, True, DARKGREY)
+    screen.blit(img, (round(WIDTH*(680/1240)), 500))
+    img = font.render(opponent_name, True, DARKGREY)
+    screen.blit(img, (round(WIDTH*(180/1240)), 50))
+    
