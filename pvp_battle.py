@@ -4,7 +4,8 @@
 '''
 This program holds the logic for the fighting backend between two Fighters
 '''
-
+from GUI.settings import *
+import pygame as pg
 from SCP.Fighter.Fighter import Fighter
 from SCP.Move.MovesList import MoveList
 # from GUI.Battle.screen import Battle_Screen
@@ -77,25 +78,25 @@ def Battle(user, fighter2, move = -1):
         print(get_user_moves()[move], next_move.successRt, next_move.baseDmg)
         if random.random() > .5:
             outcome = Attack(user, fighter2, next_move)
-            # user move missed
-            if not outcome[0]:
-                pass
-            elif outcome[1]: break
+            if outcome[1]: break
             outcome  = Attack(fighter2, user, f2_move)
-            # opponent move missed
-            if not outcome[0]:
-                pass
+            if outcome[1]: break
         else:
             outcome  = Attack(fighter2, user, f2_move)
-            # opponent move missed
-            if not outcome[0]:
-                pass
-            elif outcome[1]: break
+            if outcome[1]: break
             outcome = Attack(user, fighter2, next_move)
-            # user move missed
-            if not outcome[0]:
-                pass
-
+            if outcome[1]: break
+        while(pg.event.wait().type != pg.MOUSEBUTTONDOWN):
+            pos = pg.mouse.get_pos()
+            if pos[0] > WIDTH*(980/1240):
+                if pos[1] < HEIGHT/4:
+                    move = 0
+                elif pos[1] < HEIGHT/2:
+                    move = 1
+                elif pos[1] < 3*HEIGHT/4:
+                    move = 2
+                else:
+                    move = 3
     # Stat updates
     user.addExperience(4*fighter2.level)
 
