@@ -1,4 +1,4 @@
-from Move.MovesList import moveType
+from SCP.Move.MovesList import moveType
 from random import random
 
 class Fighter:
@@ -55,4 +55,4 @@ class Fighter:
     def stats(self):
         return 'Name: {}\n Level: {}\n Attack: {}\n Defense: {}\n Health: {}\n Moves: {}\n Maxhealth: {}\n'.format(self.name, self.level, self.attack, self.defense, self.health, self.moves, self.maxhealth)
 
-player = Fighter("Minh", 1, 5, 5, 10, [])
+# player = Fighter("Minh", 1, 5, 5, 10, [])

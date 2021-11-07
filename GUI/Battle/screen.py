@@ -26,4 +26,4 @@ def draw_moves(move_list):
     assert len(moves) <= 4, ("Too many Moves!!")
     for i, move_str in enumerate(moves):
         img = font.render(move_str, True, BLUE)
-        screen.blit(img, (1000, 10+(i*150))
+        screen.blit(img, (WIDTH*(980/1240), 10+(i*150)))
