@@ -8,6 +8,7 @@ from GUI.player_sprite import *
 from GUI.teacher_sprite import *
 from GUI.tilemap import *
 from random import randint
+from pvp_battle import *
 class Game:
     def __init__(self):
         pg.init()
@@ -27,6 +28,7 @@ class Game:
         self.grass = pg.sprite.Group()
         self.tallgrass = pg.sprite.Group()
         self.teacher = pg.sprite.Group()
+        self.battling = False
         for x in range(0, self.map.tilewidth):
             for j in range(0, self.map.tileheight):
                 Grass(self, x, j)
@@ -46,9 +48,11 @@ class Game:
         self.camera = Camera(self.map.width, self.map.height)
 
     def battle(self):
+        self.battling = True
         self.all_sprites = pg.sprite.Group()
         self.background = pg.sprite.Group()
         BattleBackground(self, 0, 0)
+        Battle(self.player, )
 
     def run(self):
         # game loop - set self.playing = False to end the game
@@ -68,8 +72,8 @@ class Game:
         self.all_sprites.update()
         self.camera.update(self.player)
         if(self.player.position == self.danger[0]):
-            self.battle()
             self.camera.reset()
+            self.battle()
         for x in range(self.dangersquares):
             if self.player.position == self.danger[x]:
                 if self.random_key == 5:
@@ -96,17 +100,18 @@ class Game:
             if event.type == pg.QUIT:
                 self.quit()
             if event.type == pg.KEYDOWN:
-                self.random_key = randint(0, 14)
-                if event.key == pg.K_ESCAPE:
-                    self.quit()
-                if event.key == pg.K_LEFT:
-                    self.player.move(dx=-1)
-                if event.key == pg.K_RIGHT:
-                    self.player.move(dx=1)
-                if event.key == pg.K_UP:
-                    self.player.move(dy=-1)
-                if event.key == pg.K_DOWN:
-                    self.player.move(dy=1)
+                if self.battling == False:
+                    self.random_key = randint(0, 14)
+                    if event.key == pg.K_ESCAPE:
+                        self.quit()
+                    if event.key == pg.K_LEFT:
+                        self.player.move(dx=-1)
+                    if event.key == pg.K_RIGHT:
+                        self.player.move(dx=1)
+                    if event.key == pg.K_UP:
+                        self.player.move(dy=-1)
+                    if event.key == pg.K_DOWN:
+                        self.player.move(dy=1)
 
     def show_start_screen(self):
         pass
