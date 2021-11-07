@@ -51,10 +51,10 @@ class BattleForegroundOpponent(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE + 525
         self.rect.y = y * TILESIZE + 75
 
-def draw_moves(move_list, screen):
-    font = pg.font.SysFont(None, 24)
+def draw_moves(screen):
+    font = pg.font.SysFont("Georgia", 36)
     moves = get_user_moves()
     assert len(moves) <= 4, ("Too many Moves!!")
     for i, move_str in enumerate(moves):
-        img = font.render(move_str, True, BLACK)
-        screen.blit(img, (1000, 10+(i*150)))
+        img = font.render(move_str, True, DARKGREY)
+        screen.blit(img, (20 + round(WIDTH*(980/1240)), 15+(i*150)))
