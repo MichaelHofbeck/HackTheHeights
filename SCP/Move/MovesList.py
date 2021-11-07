@@ -38,7 +38,7 @@ def MoveList():
 
 def moveType(type = "user"):
     if type == "user":
-        moves = ["sigh", "eyeroll","slam table","homework finnesse","knowledge cram",
+        return ["sigh", "eyeroll","slam table","homework finnesse","knowledge cram",
         "jumping kick","water gun","hypnosis","rage","lovely kiss","scary face","charm", "growl", "bitch slap"]
     elif type == "teacher":
         moves = ["sigh", "eyeroll","slam table","jumping kick","water gun","hypnosis","rage"
