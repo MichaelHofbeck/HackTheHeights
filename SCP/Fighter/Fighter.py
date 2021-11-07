@@ -29,6 +29,8 @@ class Fighter:
 
     def Damage(self, damage):
         self.health -= damage
+        if self.health > self.maxhealth:
+            self.health = self.maxhealth
 
     def IsDead(self):
         if self.health <= 0:

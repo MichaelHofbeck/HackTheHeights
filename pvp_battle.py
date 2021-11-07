@@ -50,7 +50,7 @@ def get_user_moves():
 
 # Returns size 2 array: (successful attack), (target fainted)
 def Attack(Attacker, Target, Move):
-    target_damage = round(Move.baseDmg * (1.3**(Attacker.level / Target.level)) * (1.3**(Attacker.attack/Target.defense)))
+    target_damage = round(Move.baseDmg * (1.1**(Attacker.level / Target.level)) * (1.1**(Attacker.attack/Target.defense)))
     success_chance = Move.successRt
     if random.random() < success_chance:
         Target.Damage(target_damage)
@@ -67,12 +67,14 @@ def Battle(user, fighter2, move = -1):
     move_list = MoveList()
     f2_poss_moves = fighter2.getMoves()
     f2_total_moves = len(f2_poss_moves)
+    print(get_user_moves())
     while(not user.IsDead() and not fighter2.IsDead()):
         print(user.name + ": " + str(user.health))
         print(fighter2.name + ": " + str(fighter2.health))
         next_move = move_list[get_user_moves()[move]]
         # Chooses a random move from the possible moves of computer
         f2_move = move_list[f2_poss_moves[random.randint(0, f2_total_moves - 1)]]
+        print(get_user_moves()[move], next_move.successRt, next_move.baseDmg)
         if random.random() > .5:
             outcome = Attack(user, fighter2, next_move)
             # user move missed
