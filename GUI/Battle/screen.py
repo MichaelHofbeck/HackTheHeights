@@ -20,10 +20,10 @@ class BattleBackground(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
-def draw_moves(move_list):
-    font = pygame.font.SysFont(None, 24)
+def Draw_moves(move_list, screen):
+    font = pg.font.SysFont(None, 24)
     moves = get_user_moves()
     assert len(moves) <= 4, ("Too many Moves!!")
     for i, move_str in enumerate(moves):
-        img = font.render(move_str, True, BLUE)
+        img = font.render(move_str, True, BLACK)
         screen.blit(img, (WIDTH*(980/1240), 10+(i*150)))
