@@ -106,6 +106,26 @@ class Game:
                     self.player.move(dy=-1)
                 if event.key == pg.K_DOWN:
                     self.player.move(dy=1)
+            if event.type == pg.MOUSEBUTTONDOWN:
+                pos = pg.mouse.get_pos()
+                # 260x600
+                if pos[0] > 980:
+                    if pos[1] < 150:
+                        # Top move selected
+                        print("1st move")
+                        pass
+                    elif pos[1] < 300:
+                        # second move selected
+                        print("2nd move")
+                        pass
+                    elif pos[1] < 450:
+                        # third move selected
+                        print("3rd move")
+                        pass
+                    else:
+                        # 4th move selected
+                        print("4th move")
+                        pass
 
     def show_start_screen(self):
         pass

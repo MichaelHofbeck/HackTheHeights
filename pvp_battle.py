@@ -43,9 +43,13 @@ def make_fighter():
     name, level, attack, defense, health, moves, maxhealth, experience = d["Name"], d["Level"], d["Attack"], d["Defense"], d["Health"], d["Moves"], d["Experience"], d["MaxHealth"] 
     return Fighter(name, level, attack, defense, health, moves, maxhealth, experience)
 
+# returns list of user moves
+def get_user_moves():
+    return read_info()["Moves"]
+
 # Returns size 2 array: (successful attack), (target fainted)
 def Attack(Attacker, Target, Move):
-    target_damage = round(Move.baseDmg * (1.3**(Attacker.level / Target.level)) * (1.3**(Attacker.attack/Target.defense)))
+    target_damage = rou)nd(Move.baseDmg * (1.3**(Attacker.level / Target.level)) * (1.3**(Attacker.attack/Target.defense)))
     success_chance = Move.successRt
     if random.random() < success_chance:
         Target.Damage(target_damage)
