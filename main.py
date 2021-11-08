@@ -32,7 +32,7 @@ class Game:
 
     def load_data(self):
         map_number = randint(1, 3)
-        self.map = Map('Maps\map' + str(map_number) + '.txt')
+        self.map = Map('Maps/map' + str(map_number) + '.txt')
 
     def new(self):
         # initialize all variables and do all the setup for a new game
